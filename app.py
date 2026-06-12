@@ -6,7 +6,7 @@ ca = certifi.where()
 from dotenv import load_dotenv
 load_dotenv()
 mongo_db_url = os.getenv("MONGODB_URL")
-print(mongo_db_url)
+
 
 import pymongo
 
@@ -47,7 +47,7 @@ app.add_middleware(
 )
 
 from fastapi.templating import Jinja2Templates
-templates = Jinja2Templates(directory="./templates")
+templates = Jinja2Templates(directory="templates")
 
 
 @app.get("/",tags=["authentication"])
@@ -63,7 +63,7 @@ async def train_route():
 
     except Exception as e:
         raise NetworkSecurityException(e,sys)
-@app.get("/predict")
+@app.post("/predict")
 async def predict_route(request:Request,file:UploadFile=File(...)):
     try:
         df=pd.read_csv(file.file)
@@ -78,7 +78,7 @@ async def predict_route(request:Request,file:UploadFile=File(...)):
         print(df['predicted_column'])
         #df['predicted_column'].replace(-1, 0)
         #return df.to_json()
-        df.to_csv('prediction_output/output.csv')
+        df.to_csv('prediction_output/output.csv',index=False)
         table_html = df.to_html(classes='table table-striped')
         #print(table_html)
         return templates.TemplateResponse("table.html", {"request": request, "table": table_html})
