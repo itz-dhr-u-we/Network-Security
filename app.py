@@ -124,7 +124,10 @@ async def predict_route(request: Request, file: UploadFile = File(...)):
 
         return templates.TemplateResponse(
             name="table.html",
-            context=context
+            context={
+                "request": request,
+                "table": table_html
+            }
         )
 
     except Exception as e:
@@ -136,7 +139,7 @@ async def predict_route(request: Request, file: UploadFile = File(...)):
             content=f"Internal Server Error: {str(e)}",
             status_code=500
         )
-        
+
 @app.get("/metrics")
 def get_metrics():
     try:
