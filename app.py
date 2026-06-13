@@ -71,7 +71,11 @@ async def train_route():
         return {"message": "Training completed successfully"}
 
     except Exception as e:
-        raise NetworkSecurityException(e, sys)
+        logging.error(str(e))
+        return Response(
+            content=f"Internal Server Error: {str(e)}",
+            status_code=500
+        )
 
 @app.post("/predict")
 async def predict_route(request: Request, file: UploadFile = File(...)):
@@ -108,7 +112,11 @@ async def predict_route(request: Request, file: UploadFile = File(...)):
         )
 
     except Exception as e:
-        raise NetworkSecurityException(e, sys)
+        logging.error(str(e))
+        return Response(
+            content=f"Internal Server Error: {str(e)}",
+            status_code=500
+        )
 
 @app.get("/metrics")
 def get_metrics():
