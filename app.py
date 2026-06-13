@@ -117,15 +117,10 @@ async def predict_route(request: Request, file: UploadFile = File(...)):
         table_html = df.to_html(classes="table table-striped")
 
         # FIX: Explicit context dictionary formatting for Jinja2 template response
-        context = {
-            "request": request,
-            "table": table_html
-        }
-
         return templates.TemplateResponse(
             name="table.html",
             context={
-                "request": request,
+                "request": request, 
                 "table": table_html
             }
         )
